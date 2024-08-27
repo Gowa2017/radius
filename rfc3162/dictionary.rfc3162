@@ -8,7 +8,7 @@
 #	$Id: e90e387d9e2335aad6e17422055e7a0560dacb99 $
 #
 ATTRIBUTE	NAS-IPv6-Address			95	ipv6addr
-ATTRIBUTE	Framed-Interface-Id			96	ifid
+ATTRIBUTE	Framed-Interface-Id			96	octets
 ATTRIBUTE	Framed-IPv6-Prefix			97	ipv6prefix
 ATTRIBUTE	Login-IPv6-Host				98	ipv6addr
 ATTRIBUTE	Framed-IPv6-Route			99	string
