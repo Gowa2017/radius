@@ -72,9 +72,9 @@ func NASIPv6Address_Del(p *radius.Packet) {
 	p.Attributes.Del(NASIPv6Address_Type)
 }
 
-func FramedInterfaceID_Add(p *radius.Packet, value []byte) (err error) {
+func FramedInterfaceID_Add(p *radius.Packet, value net.HardwareAddr) (err error) {
 	var a radius.Attribute
-	a, err = radius.NewBytes(value)
+	a, err = radius.NewIFID(value)
 	if err != nil {
 		return
 	}
@@ -82,34 +82,19 @@ func FramedInterfaceID_Add(p *radius.Packet, value []byte) (err error) {
 	return
 }
 
-func FramedInterfaceID_AddString(p *radius.Packet, value string) (err error) {
-	var a radius.Attribute
-	a, err = radius.NewString(value)
-	if err != nil {
-		return
-	}
-	p.Add(FramedInterfaceID_Type, a)
-	return
-}
-
-func FramedInterfaceID_Get(p *radius.Packet) (value []byte) {
+func FramedInterfaceID_Get(p *radius.Packet) (value net.HardwareAddr) {
 	value, _ = FramedInterfaceID_Lookup(p)
 	return
 }
 
-func FramedInterfaceID_GetString(p *radius.Packet) (value string) {
-	value, _ = FramedInterfaceID_LookupString(p)
-	return
-}
-
-func FramedInterfaceID_Gets(p *radius.Packet) (values [][]byte, err error) {
-	var i []byte
+func FramedInterfaceID_Gets(p *radius.Packet) (values []net.HardwareAddr, err error) {
+	var i net.HardwareAddr
 	for _, avp := range p.Attributes {
 		if avp.Type != FramedInterfaceID_Type {
 			continue
 		}
 		attr := avp.Attribute
-		i = radius.Bytes(attr)
+		i, err = radius.IFID(attr)
 		if err != nil {
 			return
 		}
@@ -118,55 +103,19 @@ func FramedInterfaceID_Gets(p *radius.Packet) (values [][]byte, err error) {
 	return
 }
 
-func FramedInterfaceID_GetStrings(p *radius.Packet) (values []string, err error) {
-	var i string
-	for _, avp := range p.Attributes {
-		if avp.Type != FramedInterfaceID_Type {
-			continue
-		}
-		attr := avp.Attribute
-		i = radius.String(attr)
-		if err != nil {
-			return
-		}
-		values = append(values, i)
-	}
-	return
-}
-
-func FramedInterfaceID_Lookup(p *radius.Packet) (value []byte, err error) {
+func FramedInterfaceID_Lookup(p *radius.Packet) (value net.HardwareAddr, err error) {
 	a, ok := p.Lookup(FramedInterfaceID_Type)
 	if !ok {
 		err = radius.ErrNoAttribute
 		return
 	}
-	value = radius.Bytes(a)
+	value, err = radius.IFID(a)
 	return
 }
 
-func FramedInterfaceID_LookupString(p *radius.Packet) (value string, err error) {
-	a, ok := p.Lookup(FramedInterfaceID_Type)
-	if !ok {
-		err = radius.ErrNoAttribute
-		return
-	}
-	value = radius.String(a)
-	return
-}
-
-func FramedInterfaceID_Set(p *radius.Packet, value []byte) (err error) {
+func FramedInterfaceID_Set(p *radius.Packet, value net.HardwareAddr) (err error) {
 	var a radius.Attribute
-	a, err = radius.NewBytes(value)
-	if err != nil {
-		return
-	}
-	p.Set(FramedInterfaceID_Type, a)
-	return
-}
-
-func FramedInterfaceID_SetString(p *radius.Packet, value string) (err error) {
-	var a radius.Attribute
-	a, err = radius.NewString(value)
+	a, err = radius.NewIFID(value)
 	if err != nil {
 		return
 	}
